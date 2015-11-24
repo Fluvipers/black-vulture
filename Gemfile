@@ -27,4 +27,5 @@ end
 
 group :development do
   gem 'spring'
+  gem 'haml-rails'
 end
