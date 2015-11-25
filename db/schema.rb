@@ -11,16 +11,51 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124212921) do
+ActiveRecord::Schema.define(version: 20151125165858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "facts", force: :cascade do |t|
+    t.integer  "line_id"
+    t.jsonb    "properties"
+    t.integer  "time_unit_id"
+    t.decimal  "value",        precision: 20, scale: 4
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "facts", ["line_id"], name: "index_facts_on_line_id", using: :btree
+  add_index "facts", ["time_unit_id"], name: "index_facts_on_time_unit_id", using: :btree
 
   create_table "lines", force: :cascade do |t|
     t.string   "name"
     t.jsonb    "properties"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "time_units", force: :cascade do |t|
+    t.datetime "when"
+    t.string   "year"
+    t.string   "semester"
+    t.string   "quarter"
+    t.string   "bimester"
+    t.string   "month"
+    t.string   "month_of_year"
+    t.string   "fortnight"
+    t.string   "week_of_year"
+    t.string   "week_of_month"
+    t.string   "day"
+    t.string   "day_of_week"
+    t.string   "day_of_month"
+    t.string   "day_of_year"
+    t.string   "noon"
+    t.string   "hour"
+    t.string   "minute"
+    t.string   "time_zone"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -45,4 +80,6 @@ ActiveRecord::Schema.define(version: 20151124212921) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "facts", "lines"
+  add_foreign_key "facts", "time_units"
 end
