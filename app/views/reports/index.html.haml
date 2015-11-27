@@ -1,4 +1,4 @@
-%table#table_report{:style => "width:100%"}
+%table#table_report
   %tr
     %th id
     %th campaign
@@ -7,7 +7,7 @@
     %th date
     %th status
   - @data.each do |d|
-    %tr 
+    %tr{:id =>"tweet_#{d["id"]}" }
       %td= d["id"]
       %td= d["campaign"]
       %td= d["influencer"]
