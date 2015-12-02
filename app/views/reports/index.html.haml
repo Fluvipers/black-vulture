@@ -1,16 +1,5 @@
 %table#table_report
   %tr
-    %th id
-    %th campaign
-    %th influencer
-    %th retweets
-    %th date
-    %th status
-  - @data.each do |d|
-    %tr{:id =>"tweet_#{d["id"]}" }
-      %td= d["id"]
-      %td= d["campaign"]
-      %td= d["influencer"]
-      %td= d["retweets"]
-      %td= d["date"]
-      %td= d["status"]
+    %th Total Reteets
+  %tr
+    %td= @data|
