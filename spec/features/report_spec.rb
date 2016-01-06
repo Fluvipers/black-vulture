@@ -26,8 +26,7 @@ feature "Show Tweets report table" do
       fact5.properties = { id: 545, campaign: 1, influencer: 44, retweets: 36, date: "2013-10-30", status: "activated"}
       fact5.save!
 
-      #visit 'reports/tweet/?filters=campaign:1,influencer:44'
-      visit 'reports/tweet/?filters=campaign:1,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:line_id'
+      visit 'reports/tweet/?filters=campaign:1,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer'
       within '#table_report' do
         expect(page).to have_content("Total retweets") 
         expect(page).to have_content(79)
