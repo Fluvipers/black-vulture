@@ -8,14 +8,16 @@ class ReportFilters
   end
 
   def self.add_count_clause
-    @query = @agregate["count"] ? "count(*), " : ""
+    @query = @agregate["count"] ? "count(*)," : ""
     add_sum_clause
   end
 
   def self.add_sum_clause
     property = @agregate["sum"]
     if property
-      @query += "sum(cast(properties::json->>'#{property}' as integer)) FROM FACTS where line_id=#{@line_id} "
+      @query += "sum(cast(properties::json->>'#{property}' as integer)) as Total FROM FACTS where line_id=#{@line_id} "
+    else
+      @query[-1] = " FROM FACTS where line_id=#{@line_id}"
     end
     add_filters
   end
@@ -41,7 +43,7 @@ class ReportFilters
   end
 
   def self.execute_query
-    result = ActiveRecord::Base.connection.execute(@query).entries[0]
-    report = result ? result["sum"] : 'No se encontraron resultados con los filtros actuales'
+    result = ActiveRecord::Base.connection.execute(@query).entries
+    report = result.empty? ? 'No se encontraron resultados con los filtros actuales' : result
   end
 end
