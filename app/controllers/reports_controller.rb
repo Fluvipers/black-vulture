@@ -7,7 +7,6 @@ class ReportsController < ApplicationController
   end
 
   def total_retweets
-    find_filters
     @data = ReportFilters.total_retweets(find_line, find_aggregate, find_filters)
   end
 

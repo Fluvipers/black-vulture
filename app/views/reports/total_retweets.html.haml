@@ -1,5 +1,13 @@
 %table#table_report
-  %tr
-    %th Total retweets
-  %tr
-    %td= @data
+  -if @data.class == Array
+    =@data.class
+    %tr
+    -@data.first.each do |key, value|
+      %th #{key}
+    -@data.each do |row|
+      %tr
+      -row.each do |key, value|
+        %td #{value}
+  -else
+    %tr
+      =@data
