@@ -39,7 +39,7 @@ feature "Show Tweets report table" do
 
         visit 'reports/tweet/?filters=campaign:1,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer'
         within '#table_report' do
-          expect(page).to have_content("Total retweets")
+          expect(page).to have_content("influencer")
           expect(page).to have_content(79)
         end
       end
@@ -79,7 +79,6 @@ feature "Show Tweets report table" do
 
         visit 'reports/tweet/?filters=campaign:7,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer'
         within '#table_report' do
-          expect(page).to have_content("Total retweets")
           expect(page).to have_content('No se encontraron resultados con los filtros actuales')
         end
       end

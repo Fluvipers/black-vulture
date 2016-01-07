@@ -1,6 +1,5 @@
 %table#table_report
   -if @data.class == Array
-    =@data.class
     %tr
     -@data.first.each do |key, value|
       %th #{key}

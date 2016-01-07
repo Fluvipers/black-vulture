@@ -9,6 +9,12 @@ class ReportFilters
 
   def self.add_count_clause
     @query = @agregate["count"] ? "count(*)," : ""
+    add_avg_clause
+  end
+
+  def self.add_avg_clause
+    property = @agregate["avg"]
+    @query += property ? "avg(cast(properties::json->>'#{property}' as integer)) as Promedio," : @query
     add_sum_clause
   end
 
