@@ -23,7 +23,8 @@ class ReportFilters
     if property
       @query += "sum(cast(properties::json->>'#{property}' as integer)) as Total FROM FACTS where line_id=#{@line_id} "
     else
-      @query[-1] = " FROM FACTS where line_id=#{@line_id}"
+      index = @query.blank? ?  0 : -1
+      @query[index] = " FROM FACTS where line_id=#{@line_id} "
     end
     add_filters
   end
@@ -43,7 +44,13 @@ class ReportFilters
       @query.insert 7, "properties::json->>'#{property}' as #{property},"
       @query.insert -1, "properties::json->>'#{property}',"
     end
+    correct_query
+  end
 
+  def self.correct_query
+    if @query[", FROM"]
+      @query[", FROM"] = " FROM "
+    end
     @query[-1] = ";"
     execute_query
   end
