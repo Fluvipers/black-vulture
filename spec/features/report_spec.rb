@@ -6,7 +6,7 @@ feature "Show Tweets report table" do
     context "With correct property filters called in query string" do
       scenario "Should show the report table" do
 
-        line = FactoryGirl.create(:line, :tweet)
+        line = FactoryGirl.create(:line, :tweet_line)
         fact1 = Fact.new()
         fact1.line_id = line.id
         fact1.properties = { id: 14, campaign: 1, influencer: 44, retweets: 43, date: "2013-10-10", status: "activated"}
@@ -47,7 +47,7 @@ feature "Show Tweets report table" do
     context "With wrong property filters called in query string" do
       scenario "Should show an error Message" do
 
-        line = FactoryGirl.create(:line, :tweet)
+        line = FactoryGirl.create(:line, :tweet_line)
         fact1 = Fact.new()
         fact1.line_id = line.id
         fact1.properties = { id: 14, campaign: 1, influencer: 44, retweets: 43, date: "2013-10-10", status: "activated"}

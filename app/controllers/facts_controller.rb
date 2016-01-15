@@ -25,9 +25,6 @@ class FactsController < ApplicationController
     end
 
     def fact_params
-      par = params.require(:fact).permit().tap do |whitelisted|
-        whitelisted[:properties] = params[:fact][:properties]
-      end
-      par
+      params.require(:fact).permit().tap { |whitelisted| whitelisted[:properties] = params[:fact][:properties]}
     end
 end

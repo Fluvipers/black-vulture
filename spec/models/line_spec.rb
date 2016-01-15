@@ -6,7 +6,7 @@ RSpec.describe Line, type: :model do
   context "Create a line with a name that already exists" do
     context "and the name is exactly the same" do
       it "should not create the line" do
-        line = FactoryGirl.create(:line, :tweet)
+        line = FactoryGirl.create(:line, :tweet_line)
         new_line = Line.new
         new_line.name = 'tweet'
 
@@ -20,7 +20,7 @@ RSpec.describe Line, type: :model do
 
     context "and the name has some capitalized letters" do
       it "should not create the line" do
-        line = FactoryGirl.create(:line, :tweet)
+        line = FactoryGirl.create(:line, :tweet_line)
         new_line = Line.new
         new_line.name = 'TwEet'
 
