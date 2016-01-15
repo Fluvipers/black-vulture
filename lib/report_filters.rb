@@ -1,6 +1,6 @@
 class ReportFilters
   
-  def self.total_retweets(line_id, agregate, filters)
+  def self.create_report(line_id, agregate, filters)
     @agregate = agregate
     @filters = filters
     @line_id = line_id

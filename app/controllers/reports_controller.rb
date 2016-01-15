@@ -6,15 +6,14 @@ class ReportsController < ApplicationController
     @data = Fact.all
   end
 
-  def total_retweets
-    @data = ReportFilters.total_retweets(find_line, find_aggregate, find_filters)
+  def create_report
+    @data = ReportFilters.create_report(find_line, find_aggregate, find_filters)
   end
 
 private
 
   def find_line
-    line_id = (Line.find_by name: params[:fact]).id
-    line_id.to_i
+    line_id = Line.find_by_name(params[:fact]).id
   end
 
   def find_aggregate
