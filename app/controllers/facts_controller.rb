@@ -2,12 +2,11 @@ class FactsController < ApplicationController
   
   def index
     @facts = find_line.facts
-    puts 'entro index'
   end
 
   def create
     @fact = Fact.new(fact_params)
-    @fact.line = find_line
+    @fact.line_id = find_line.id
 
     respond_to do |format|
       if @fact.save
@@ -34,14 +33,13 @@ class FactsController < ApplicationController
 
   private
     def find_line
-      @line = Line.find_by_name(params[:line])
+      @line = Line.find_by_name(params[:fact][:line])
     end
 
     def fact_params
       par = params.require(:fact).permit().tap do |whitelisted|
         whitelisted[:properties] = params[:fact][:properties]
       end
-      puts par
       par
     end
 end
