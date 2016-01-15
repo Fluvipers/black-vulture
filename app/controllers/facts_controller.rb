@@ -19,18 +19,6 @@ class FactsController < ApplicationController
     end
   end
 
-  def update
-    respond_to do |format|
-      if @fact.update(task_params)
-        format.html { redirect_to facts_path(@line), notice: 'Fact succesfully updated.' }
-        format.json { render :show, status: :ok, location: @fact } 
-      else
-        format.html { redirect_to facts_path(@line) }
-        format.json { render json: @fact.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   private
     def find_line
       @line = Line.find_by_name(params[:fact][:line])
