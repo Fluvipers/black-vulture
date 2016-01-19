@@ -1,9 +1,62 @@
 class ReportFilters
   
-  def self.total_retweets
-    query = "SELECT line_id, sum(cast(properties::json->>'retweets' as integer)) FROM FACTS where line_id=1 and key='retweets' group by line_id;"
-    line = ActiveRecord::Base.connection.execute(query).values.first[1].to_i
-    line
+  def self.create_report(line_id, agregate, filters)
+    @agregate = agregate
+    @filters = filters
+    @line_id = line_id
+    add_count_clause
   end
 
+  def self.add_count_clause
+    @query = @agregate["count"] ? "count(*)," : ""
+    add_avg_clause
+  end
+
+  def self.add_avg_clause
+    property = @agregate["avg"]
+    @query += property ? "avg(cast(properties::json->>'#{property}' as integer)) as Promedio," : @query
+    add_sum_clause
+  end
+
+  def self.add_sum_clause
+    property = @agregate["sum"]
+    if property
+      @query += "sum(cast(properties::json->>'#{property}' as integer)) as Total FROM FACTS where line_id=#{@line_id} "
+    else
+      index = @query.blank? ?  0 : -1
+      @query[index] = " FROM FACTS where line_id=#{@line_id} "
+    end
+    add_filters
+  end
+
+  def self.add_filters
+    @filters.each do |key, value|
+      @query += "and properties::json->>'#{key}'='#{value}' "
+    end
+    add_group_clause
+  end
+
+  def self.add_group_clause
+    properties = @agregate["group"].split(/-/)
+    @query = "SELECT " + @query + "GROUP BY "
+
+    properties.each do |property|
+      @query.insert 7, "properties::json->>'#{property}' as #{property},"
+      @query.insert -1, "properties::json->>'#{property}',"
+    end
+    correct_query
+  end
+
+  def self.correct_query
+    if @query[", FROM"]
+      @query[", FROM"] = " FROM "
+    end
+    @query[-1] = ";"
+    execute_query
+  end
+
+  def self.execute_query
+    result = ActiveRecord::Base.connection.execute(@query).entries
+    report = result.empty? ? 'No se encontraron resultados con los filtros actuales' : result
+  end
 end

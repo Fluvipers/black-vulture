@@ -1,0 +1,12 @@
+%table#table_report
+  -if @data.class == Array
+    %tr
+    -@data.first.each do |key, value|
+      %th #{key}
+    -@data.each do |row|
+      %tr
+      -row.each do |key, value|
+        %td #{value}
+  -else
+    %tr
+      =@data
