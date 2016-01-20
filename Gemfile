@@ -30,4 +30,11 @@ end
 group :development do
   gem 'spring'
   gem 'haml-rails'
+  gem 'capistrano'
+  gem 'capistrano-rvm'
+  gem 'capistrano-rails'
+end
+group :production, :staging do
+  gem "unicorn-rails"
+  gem 'unicorn'
 end
