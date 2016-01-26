@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160106233413) do
+ActiveRecord::Schema.define(version: 20160126181632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,16 +36,6 @@ ActiveRecord::Schema.define(version: 20160106233413) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-  create_table "reports", force: :cascade do |t|
-    t.integer  "line_id"
-    t.string   "name"
-    t.string   "query"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "reports", ["line_id"], name: "index_reports_on_line_id", using: :btree
 
   create_table "time_units", force: :cascade do |t|
     t.datetime "when"
@@ -96,5 +86,4 @@ ActiveRecord::Schema.define(version: 20160106233413) do
 
   add_foreign_key "facts", "lines"
   add_foreign_key "facts", "time_units"
-  add_foreign_key "reports", "lines"
 end
