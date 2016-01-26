@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160126181632) do
+ActiveRecord::Schema.define(version: 20160126201017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "dashboards", force: :cascade do |t|
+    t.string  "name"
+    t.string  "url"
+    t.integer "line_id"
+  end
+
+  add_index "dashboards", ["line_id"], name: "index_dashboards_on_line_id", using: :btree
 
   create_table "facts", force: :cascade do |t|
     t.integer  "line_id"
@@ -35,6 +43,14 @@ ActiveRecord::Schema.define(version: 20160126181632) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "sections", force: :cascade do |t|
+    t.string  "name"
+    t.string  "query"
+    t.integer "dashboard_id"
+  end
+
+  add_index "sections", ["dashboard_id"], name: "index_sections_on_dashboard_id", using: :btree
 
   create_table "time_units", force: :cascade do |t|
     t.datetime "when"
@@ -83,6 +99,8 @@ ActiveRecord::Schema.define(version: 20160126181632) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "dashboards", "lines"
   add_foreign_key "facts", "lines"
   add_foreign_key "facts", "time_units"
+  add_foreign_key "sections", "dashboards"
 end
