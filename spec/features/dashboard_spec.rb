@@ -35,9 +35,6 @@ feature "Show Dashboard" do
 
 
   context "Exists a tweet line" do
-    context "and it doesn't have a dashboard associated" do
-     # visit "/dashboard/#{dashboard.id}"
-    end
     context "and it has a dashboard associated" do
       context "and this dashboard has associated sections" do
         scenario "should show all the sections" do
