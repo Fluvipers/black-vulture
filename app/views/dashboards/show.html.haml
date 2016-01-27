@@ -1,19 +1,22 @@
-%h1
+%h1.text-center
   = @dashboard.name
 %br
-- @sections.each do |name, report|
-  %h3
-    = name
-    .container
-      .table-responsive
-        %table.table
-          %thead
-            %tr
-              - report.keys.each do |key|
-                %th
-                  = key
-          %tbody
-            %tr
-              - report.values.each do |val|
-                %th
-                  = val
+.container
+  - @sections.each do |name, report|
+    .row
+      .col-md-8.col-md-offset-2
+        %h3.text-center
+          = name
+          %br
+          %br
+          .table-responsive
+            %table.table.table-bordered.table-hover{:id => name.gsub(" ", "_")}
+              -if report.class == Array
+                -report.first.each do |key, value|
+                  %th.text-center #{key}
+                -report.each do |row|
+                  %tr
+                  -row.each do |key, value|
+                    %td #{value}
+              -else
+                = report

@@ -35,15 +35,12 @@ feature "Show Dashboard" do
 
 
   context "Exists a tweet line" do
-    context "and it doesn't have a dashboard associated" do
-     # visit "/dashboard/#{dashboard.id}"
-    end
     context "and it has a dashboard associated" do
       context "and this dashboard has associated sections" do
         scenario "should show all the sections" do
-          section1 = @dashboard.sections.create!(name:'Seccion 1', query:'filters=campaign:1,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer')
+          section1 = @dashboard.sections.create!(name:'Seccion 1', query: "aggregate=sum:retweets,group:campaign-influencer")
           section2 = @dashboard.sections.create!(name:'Seccion 2', query:'filters=campaign:1,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer')
-          section3 = @dashboard.sections.create!(name:'Seccion 3', query:'filters=campaign:1,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer')
+          section3 = @dashboard.sections.create!(name:'Seccion 3', query:'filters=campaign:1,influencer:32&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer')
 
           visit "/dashboard/#{@dashboard.id}"
 
@@ -51,6 +48,27 @@ feature "Show Dashboard" do
           expect(page).to have_content("Seccion 1")
           expect(page).to have_content("Seccion 2")
           expect(page).to have_content("Seccion 3")
+
+          within("#Seccion_1") do
+            expect(page).to have_xpath(".//tr", :count => 4)
+            expect(page).to have_xpath(".//th", :count => 3)
+            expect(page).to have_content("total")
+            expect(page).not_to have_content("count")
+          end
+
+          within("#Seccion_2") do
+            expect(page).to have_xpath(".//tr", :count => 1)
+            expect(page).to have_xpath(".//th", :count => 5)
+            expect(page).to have_content("total")
+            expect(page).to have_content("count")
+            expect(page).to have_content("promedio")
+          end
+
+          within("#Seccion_3") do
+            expect(page).to have_xpath(".//tr", :count => 0)
+            expect(page).to have_xpath(".//th", :count => 0)
+            expect(page).to have_content("No se encontraron resultados con los filtros actuales")
+          end
         end
       end
       context "and this dashboard has no associated sections" do
