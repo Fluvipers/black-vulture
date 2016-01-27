@@ -6,14 +6,13 @@
     = name
     .container
       .table-responsive
-        %table.table
-          %thead
-            %tr
-              - report.keys.each do |key|
-                %th
-                  = key
-          %tbody
-            %tr
-              - report.values.each do |val|
-                %th
-                  = val
+        %table.table{:id => name.gsub(" ", "_")}
+          -if report.class == Array
+            -report.first.each do |key, value|
+              %th #{key}
+            -report.each do |row|
+              %tr
+              -row.each do |key, value|
+                %td #{value}
+          -else
+            = report

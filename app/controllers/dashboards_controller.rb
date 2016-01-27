@@ -9,7 +9,7 @@ class DashboardsController < ApplicationController
 
   def hash_of_sections
     sections_hash = Hash.new()
-    @dashboard.sections.each{|section| sections_hash[section.name] = CreateSectionReport.new(@dashboard.line, section.query).create_section_report[0]}
+    @dashboard.sections.each{|section| sections_hash[section.name] = CreateSectionReport.new(@dashboard.line, section.query).create_section_report}
     sections_hash
   end
 
