@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'facts/:line', to: 'facts#index', as: 'facts'
   get 'fact/', to: 'facts#show'
   post 'facts/', to: 'facts#create'
+  get 'dashboard/:id/', to: 'dashboards#show', as: 'dashboard'
 
   # Temporal route for  report test
   resources :reports

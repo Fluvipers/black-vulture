@@ -1,0 +1,19 @@
+%h1
+  = @dashboard.name
+%br
+- @sections.each do |name, report|
+  %h3
+    = name
+    .container
+      .table-responsive
+        %table.table
+          %thead
+            %tr
+              - report.keys.each do |key|
+                %th
+                  = key
+          %tbody
+            %tr
+              - report.values.each do |val|
+                %th
+                  = val
