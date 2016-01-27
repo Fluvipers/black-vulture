@@ -1,48 +1,63 @@
 require 'rails_helper'
 
-feature "Show Tweets report table" do
-  context "Existing a tweet line" do
-    let(:user) {FactoryGirl.create(:user)}
-    context "With correct property filters called in query string" do
-      scenario "Should show the report table" do
+feature "Show Dashboard" do
+  before do
+    @user = FactoryGirl.create(:user)
+    @line = FactoryGirl.create(:line, :tweet_line) 
+    @fact1 = Fact.create!(line_id: @line.id, properties: { id: 14, campaign: 1, influencer: 44, retweets: 43, date: "2013-10-10",
+                           status: "activated"})
 
-        line = FactoryGirl.create(:line, :tweet_line)
-        fact1 = Fact.new()
-        fact1.line_id = line.id
-        fact1.properties = { id: 14, campaign: 1, influencer: 44, retweets: 43, date: "2013-10-10", status: "activated"}
-        fact1.save!
-        fact2 = Fact.new()
-        fact2.line_id = line.id
-        fact2.properties = { id: 44, campaign: 2, influencer: 44, retweets: 26, date: "2013-10-10", status: "created"}
-        fact2.save!
-        fact3 = Fact.new()
-        fact3.line_id = line.id
-        fact3.properties = { id: 673, campaign: 4, influencer: 32, retweets: 17, date: "2013-10-20", status: "activated"}
-        fact3.save!
-        fact4 = Fact.new()
-        fact4.line_id = line.id
-        fact4.properties = { id: 49, campaign: 1, influencer: 17, retweets: 22, date: "2013-10-20", status: "created"}
-        fact4.save!
-        fact5 = Fact.new()
-        fact5.line_id = line.id
-        fact5.properties = { id: 545, campaign: 1, influencer: 44, retweets: 36, date: "2013-10-30", status: "activated"}
-        fact5.save!
+    @fact2 = Fact.create!(line_id: @line.id, properties: { id: 44, campaign: 2, influencer: 44, retweets: 26, date: "2013-10-10",
+                           status: "created"} )
 
-        dashboard = line.dashboards.create!(name: "Mi primer dashboard")
+    @fact3 = Fact.create!(line_id: @line.id, properties: { id: 44, campaign: 2, influencer: 44, retweets: 26, date: "2013-10-10",
+                           status: "created"} )
 
-        visit new_user_session_path
+    @fact4 = Fact.create!(line_id: @line.id, properties: { id: 673, campaign: 4, influencer: 32, retweets: 17, date: "2013-10-20",
+                           status: "activated"})
 
-        within("#new_user") do
-          fill_in "Email", with: user.email
-          fill_in "Password", with: user.password
-          click_button "Log in"
+    @fact5 = Fact.create!(line_id: @line.id, properties: { id: 49, campaign: 1, influencer: 17, retweets: 22, date: "2013-10-20",
+                           status: "created"})
+
+    @fact6 = Fact.create!(line_id: @line.id, properties: { id: 545, campaign: 1, influencer: 44, retweets: 36, date: "2013-10-30",
+                           status: "activated"})
+    @dashboard = @line.dashboards.create!(name:'Mi primer dashboard')
+
+    visit new_user_session_path
+
+    within("#new_user") do
+      fill_in "Email", with: @user.email
+      fill_in "Password", with: @user.password
+      click_button "Log in"
+    end
+  end
+
+
+
+  context "Exists a tweet line" do
+    context "and it doesn't have a dashboard associated" do
+     # visit "/dashboard/#{dashboard.id}"
+    end
+    context "and it has a dashboard associated" do
+      context "and this dashboard has associated sections" do
+        scenario "should show all the sections" do
+          section1 = @dashboard.sections.create!(name:'Seccion 1', query:'filters=campaign:1,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer')
+          section2 = @dashboard.sections.create!(name:'Seccion 2', query:'filters=campaign:1,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer')
+          section3 = @dashboard.sections.create!(name:'Seccion 3', query:'filters=campaign:1,influencer:44&aggregate=sum:retweets,count:retweets,avg:retweets,group:campaign-influencer')
+
+          visit "/dashboard/#{@dashboard.id}"
+
+          expect(page).to have_content("Mi primer dashboard")
+          expect(page).to have_content("Seccion 1")
+          expect(page).to have_content("Seccion 2")
+          expect(page).to have_content("Seccion 3")
         end
+      end
+      context "and this dashboard has no associated sections" do
+        scenario "should show only dashboard name" do
+          visit "/dashboard/#{@dashboard.id}"
 
-
-        visit "dashboard/#{dashboard.id}"
-        within '#table_report' do
-          expect(page).to have_content("influencer")
-          expect(page).to have_content(79)
+          expect(page).to have_content("Mi primer dashboard")
         end
       end
     end

@@ -1,6 +1,6 @@
 class Dashboard< ActiveRecord::Base
   belongs_to :line
-  has_many :section, dependent: :destroy
+  has_many :sections, dependent: :destroy
   validates_presence_of :name
   after_save :url_assign
 
