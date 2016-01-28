@@ -24,7 +24,7 @@ RSpec.describe TimeUnit, type: :model do
         expect(time_unit.time_zone).to eq "UTC"
       end
     end
-    context "And ther is no 'when' parameter specified" do
+    context "And there is no 'when' parameter specified" do
       it "Should not create the time_unit" do
         time_unit = TimeUnit.new
 
