@@ -5,7 +5,7 @@ class FactsController < ApplicationController
   end
 
   def create
-    @fact = Fact.new(fact_params)
+    @fact = Fact.new(properties: fact_params[:properties], time_unit_id: find_time_unit)
     @fact.line_id = find_line.id
 
     respond_to do |format|
@@ -44,5 +44,9 @@ class FactsController < ApplicationController
       properties.each do |key, value|
         @fact.properties[key] = value if @fact.properties[key]
       end
+    end
+
+    def find_time_unit
+      TimeUnit.find_by_when(DateTime.now.beginning_of_minute).id
     end
 end
