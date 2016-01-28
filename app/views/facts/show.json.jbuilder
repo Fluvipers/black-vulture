@@ -1,1 +1,1 @@
-json.extract! @fact, :id, :line_id, :properties
+json.extract! @fact, :id, :line_id
