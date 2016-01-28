@@ -12,7 +12,7 @@ class TimeUnit < ActiveRecord::Base
     self.month_of_year = self.when.strftime("%B")
     self.fortnight = set_time_lapse(self.when.day, 15)
     self.week_of_year = week_of_the_year
-    self.week_of_month = week_of_month
+    self.week_of_month = week_of_the_month
     self.day = self.when.day.to_s
     self.day_of_week = self.when.wday.to_s
     self.day_of_month = self.when.mday.to_s
@@ -28,7 +28,7 @@ class TimeUnit < ActiveRecord::Base
     lapse_unit.ceil.to_s
   end
 
-  def week_of_month
+  def week_of_the_month
     week_of_month_beginning = self.when.beginning_of_month.strftime("%W").to_i
     weekOfMonth = self.week_of_year.to_i - week_of_month_beginning
     weekOfMonth.to_s
